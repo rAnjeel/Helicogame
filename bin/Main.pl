@@ -1,14 +1,18 @@
-# Test Connexion dataBase
-
 use strict;
-
+use warnings;
 use Connexion;
 
-my $connexion = Connexion->new('helico', 'localhost', 'postgres', 'postgres');
-my $dbh = $connexion->get_dbh();
-my $sth = $dbh->prepare('SELECT * FROM Obstacle');
-$sth->execute();
-while (my $row = $sth->fetchrow_hashref()) {
-    print "id: $row->{id}, name: $row->{name}\n";
+# Créer une instance de MaConnexion
+my $connexion = MaConnexion->new();
+
+# Récupérer les obstacles depuis la base de données
+my $obstacles = $connexion->get_obstacles();
+
+# Vérifier si la récupération a réussi
+if ($obstacles) {
+    foreach my $obstacle (@$obstacles) {
+        print "ID: $obstacle->{id}, Points: $obstacle->{points}\n";
+    }
+} else {
+    print "La récupération des obstacles a échoué.\n";
 }
-$connexion->disconnect();
